@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  druid:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: druid
+    hostname: druid
+    restart: unless-stopped
+    ports:
+      - "8081:8081"  # Coordinator-Overlord
+      - "8082:8082"  # Broker
+      - "8083:8083"  # Historical
+      - "8888:8888"  # Router
+      - "8091:8091"  # MiddleManager
+    environment:
+      - CLUSTER_SIZE=micro-quickstart
+      # - ENABLE_JAVASCRIPT=true
+      # - START_MIDDLE_MANAGER=true
+      # - LOG4J_PROPERTIES_FILE=/druid/apache-druid-0.20.2/log4j2.properties
+    volumes:
+      - druid_data:/druid/apache-druid-0.20.2/var
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888/status/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: flask-api
+    ports:
+      - "5000:5000"
+    environment:
+      - DRUID_URL=http://druid:8888
+    depends_on:
+      druid:
+        condition: service_healthy
+    volumes:
+      - ./api:/app
+
+volumes:
+  druid_data:
