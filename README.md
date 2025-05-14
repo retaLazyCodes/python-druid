@@ -1,6 +1,10 @@
-# 🐳 Flask API + Docker + Druid
+# 🐳 Entorno de Pruebas: Druid + API Python 
 
-Este proyecto levanta una API y un entorno con Apache Druid para realizar consultas sobre un conjunto de datos de prueba llamado `checkins`.
+Imagen Docker para levantar un clúster simple de Druid junto con una API Python para pruebas y desarrollo.
+
+> 🧱 **Basado en**: [metabase/druid-docker](https://github.com/metabase/druid-docker)
+
+Este proyecto proporciona un entorno liviano para desarrollo local y pruebas de consultas sobre datos en Apache Druid, expuestos a través de una API en Python.
 
 ## 🚀 Cómo levantar el proyecto
 
